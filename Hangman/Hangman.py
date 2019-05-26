@@ -18,8 +18,10 @@ while left_tries > 0:
 
     if guess not in chosen_word:
         print("No such letter in the word")
+        left_tries -= 1
     elif guess in uncovered_letters:
         print("No improvements")
+        left_tries -= 1
     else:
         uncovered_letters.add(guess)
         hidden_word = ["-" if letter not in uncovered_letters else letter for letter in chosen_word]
@@ -27,7 +29,5 @@ while left_tries > 0:
             print("\n" + chosen_word)
             print("You guessed the word!\nYou survived!")
             break
-
-    left_tries -= 1
 else:
     print("You are hanged!")
