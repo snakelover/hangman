@@ -9,25 +9,35 @@ chosen_word = choice(words)
 hidden_word = ["-" for letter in chosen_word]
 left_tries = 8
 uncovered_letters = set()
+typed_letters = set()
+win = False
 
-while left_tries > 0:
+while left_tries > 0 and not win:
     print()
     print("".join(hidden_word))
 
     guess = input("Input a letter: ")
 
-    if guess not in chosen_word:
+    if len(guess) != 1:
+        print("You should print a single letter")
+    elif not guess.isascii() or not guess.islower():
+        print("It is not an ASCII lowercase letter")
+    elif guess in typed_letters:
+        print("You already typed this letter")
+    elif guess not in chosen_word:
         print("No such letter in the word")
-        left_tries -= 1
-    elif guess in uncovered_letters:
-        print("No improvements")
-        left_tries -= 1
+        typed_letters.add(guess)
+        left_tries -= 1   
     else:
         uncovered_letters.add(guess)
+        typed_letters.add(guess)
         hidden_word = ["-" if letter not in uncovered_letters else letter for letter in chosen_word]
         if uncovered_letters == set(chosen_word):
-            print("\n" + chosen_word)
-            print("You guessed the word!\nYou survived!")
-            break
+            win = True
+    
+
+if win:
+    print("\n" + chosen_word)
+    print("You guessed the word!\nYou survived!")
 else:
     print("You are hanged!")
